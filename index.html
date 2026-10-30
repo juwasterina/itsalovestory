@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Wawa 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #241b21;
+            --card-bg: rgba(43, 31, 38, 0.9);
+            --accent-rose: #f2a69c;
+            --accent-gold: #fce1b6;
+            --text-main: #fff5f2;
+            --text-muted: #d4b8b2;
+            --border-color: rgba(242, 166, 156, 0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(242, 166, 156, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(252, 225, 182, 0.2) 0%, transparent 50%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 580px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            position: relative;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Music Player Box */
+        .music-box {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .music-box p {
+            font-size: 0.9rem;
+            color: var(--accent-rose);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
+
+        /* Passcode Screen */
+        #passcode-screen {
+            text-align: center;
+        }
+
+        #passcode-screen h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--accent-gold);
+            font-weight: 400;
+        }
+
+        #passcode-screen p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .pin-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pin-input {
+            width: 50px;
+            height: 60px;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .pin-input:focus {
+            border-color: var(--accent-rose);
+        }
+
+        .error-msg {
+            color: #ff9999;
+            font-size: 0.85rem;
+            height: 20px;
+            margin-top: 10px;
+        }
+
+        /* Letter & Diary Screen */
+        #letter-screen {
+            display: none;
+        }
+
+        /* Pages logic */
+        .diary-page {
+            display: none; /* Hide all pages by default */
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .diary-page.active {
+            display: block; /* Show active page */
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .letter-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            color: var(--accent-gold);
+            font-weight: 400;
+        }
+
+        .letter-body {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            line-height: 1.85;
+            color: var(--text-main);
+            white-space: pre-line;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 25px;
+        }
+
+        .letter-body::-webkit-scrollbar {
+            width: 4px;
+        }
+        .letter-body::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .signature {
+            text-align: right;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            font-style: italic;
+            color: var(--accent-rose);
+        }
+
+        /* Navigation Bar Controls */
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-btn {
+            background: rgba(242, 166, 156, 0.15);
+            border: 1px solid var(--border-color);
+            color: var(--accent-rose);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(242, 166, 156, 0.3);
+            color: var(--text-main);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .page-indicator {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Passcode Entry Screen -->
+        <div id="passcode-screen">
+            <h2>🔒 For Wawa's Eyes Only</h2>
+            <p>Enter your 4-digit secret code to open</p>
+            
+            <div class="pin-inputs">
+                <input type="password" maxlength="1" class="pin-input" autofocus>
+                <input type="password" maxlength="1" class="pin-input">
+                <input type="password" maxlength="1" class="pin-input">
+                <input type="password" maxlength="1" class="pin-input">
+            </div>
+            <div class="error-msg" id="error-msg"></div>
+        </div>
+
+        <!-- Letter & Diary Screen -->
+        <div id="letter-screen">
+            <!-- Music Player -->
+            <div class="music-box">
+                <p>🎵 kanegi. - not because</p>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/ZY84RInuj30?si=Td9jqjM8rcw7PGSt&amp;start=23" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- PAGE 1 -->
+            <div class="diary-page active" id="page-1">
+                <div class="letter-header">
+                    <h1>To my dearest wawa,</h1>
+                </div>
+                <div class="letter-body">You might not understand the logic again behind my crazy antics like this but, I just wanted to let you know:
+                    That I realized something, ahahahahaha you know I was anxious last last night, because I wasn’t used to the silence in call and I don’t understand how it is okay, like how can u be okay with me not talking? When im going crazy thinking I will just waste ur time? I know yeah im dumb, I know, idiot me. 
+                    
+                    Cos only after last night did I realize how your presence means so much to me, even if we are not talking just knowing you are on the other side it feels so much better. 
+                    
+                    Idk why T.T but maybe because I wasn't feeling well yesterday so I am emotional and realizing things? Becos I am so used to making myself better, like I am not allowed to be sick because no one is there for me to lean on? 
+                    
+                    Then suddenly I have you who worries about me too? Hayssst! 
+                    
+                    I didn’t know that its normal to be speechless at times? cos its not everyday we can talk so much, and we sometimes could run out of things we can talk about. But you being there really makes a big difference. 
+                    
+                    I love u when ur chaotic and I love you when ur calm and quiet. 
+                    
+                    I'm still learning I hope u don’t mind me being slow ☺️</div>
+                <div class="signature">From Jaja</div>
+            </div>
+
+            <!-- PAGE 2 (Your New Page!) -->
+            <div class="diary-page" id="page-2">
+                <div class="letter-header">
+                    <h1>Entry #2 📖</h1>
+                </div>
+                <div class="letter-body">Write your second entry here! 
+
+                You can write new notes, thoughts, memories, or updates whenever you want to add another page to your diary.</div>
+                <div class="signature">From Jaja</div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <div class="page-navigation">
+                <button class="nav-btn" id="prev-btn" onclick="changePage(-1)" disabled>← Previous</button>
+                <span class="page-indicator" id="page-indicator">Page 1 of 2</span>
+                <button class="nav-btn" id="next-btn" onclick="changePage(1)">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CORRECT_PIN = "0916";
+        const inputs = document.querySelectorAll('.pin-input');
+        const errorMsg = document.getElementById('error-msg');
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                const val = e.target.value;
+                if (val && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+                checkPin();
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        function checkPin() {
+            let entered = Array.from(inputs).map(i => i.value).join('');
+            if (entered.length === 4) {
+                if (entered === CORRECT_PIN) {
+                    document.getElementById('passcode-screen').style.display = 'none';
+                    document.getElementById('letter-screen').style.display = 'block';
+                } else {
+                    errorMsg.innerText = "Incorrect passcode, try again!";
+                    inputs.forEach(i => i.value = '');
+                    inputs[0].focus();
+                }
+            }
+        }
+
+        /* Multi-Page Navigation Script */
+        let currentPage = 1;
+        const totalPages = 2; // Total number of diary pages
+
+        function changePage(direction) {
+            document.getElementById(`page-${currentPage}`).classList.remove('active');
+            currentPage += direction;
+            document.getElementById(`page-${currentPage}`).classList.add('active');
+
+            // Update button states
+            document.getElementById('prev-btn').disabled = (currentPage === 1);
+            document.getElementById('next-btn').disabled = (currentPage === totalPages);
+            
+            // Update page count indicator
+            document.getElementById('page-indicator').innerText = `Page ${currentPage} of ${totalPages}`;
+        }
+    </script>
+</body>
+</html>
